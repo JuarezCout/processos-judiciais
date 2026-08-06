@@ -11,15 +11,15 @@ export async function GET() {
     processosPorSituacao,
     processosPorTribunal,
     ultimosAndamentos,
-  ] = await Promise.all([
+  ] = await Promise.all([ // processosPorTribunal reused as processosPorAssunto below
     prisma.processo.count(),
     prisma.processo.groupBy({ by: ["situacao"], _count: true }),
-    prisma.processo.groupBy({ by: ["tribunal"], _count: true, orderBy: { _count: { tribunal: "desc" } }, take: 5 }),
+    prisma.processo.groupBy({ by: ["assunto"], _count: true, orderBy: { _count: { assunto: "desc" } }, take: 5 }),
     prisma.historicoProcessual.findMany({
       take: 10,
       orderBy: { dataMovimentacao: "desc" },
       include: {
-        processo: { select: { numero: true, classe: true } },
+        processo: { select: { numero: true, tipoProcedimento: true } },
         usuario: { select: { name: true } },
       },
     }),
@@ -28,7 +28,7 @@ export async function GET() {
   return NextResponse.json({
     totalProcessos,
     processosPorSituacao,
-    processosPorTribunal,
+    processosPorAssunto: processosPorTribunal,
     ultimosAndamentos,
   });
 }

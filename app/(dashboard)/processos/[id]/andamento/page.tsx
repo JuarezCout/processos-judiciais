@@ -18,7 +18,7 @@ export default async function AndamentoPage({
   const { id } = await params;
   const processo = await prisma.processo.findUnique({
     where: { id },
-    select: { id: true, numero: true, classe: true },
+    select: { id: true, numero: true, tipoProcedimento: true },
   });
   if (!processo) notFound();
 
@@ -34,7 +34,7 @@ export default async function AndamentoPage({
         </Link>
         <h1 className="text-2xl font-bold text-slate-800">Registrar Andamento</h1>
         <p className="text-slate-500 font-mono text-sm">
-          {processo.numero} — {processo.classe}
+          {processo.numero ?? "ADM"} — {processo.tipoProcedimento}
         </p>
       </div>
       <AndamentoForm processoId={processo.id} />
