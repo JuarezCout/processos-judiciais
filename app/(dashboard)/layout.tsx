@@ -6,9 +6,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await auth();
   if (!session) redirect("/login");
 
+  const isAdmin = (session.user as { role?: string }).role === "admin";
+
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
+      <Sidebar isAdmin={isAdmin} />
       <main className="flex-1 bg-slate-50 overflow-auto">
         {children}
       </main>

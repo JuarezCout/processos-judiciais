@@ -11,6 +11,11 @@ const registerSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== "admin") {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
   const body = await req.json();
   const parsed = registerSchema.safeParse(body);
   if (!parsed.success) {

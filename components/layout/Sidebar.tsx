@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Scale, FolderOpen, LayoutDashboard, LogOut } from "lucide-react";
+import { Scale, FolderOpen, LayoutDashboard, LogOut, Users } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -41,6 +41,20 @@ export function Sidebar() {
             {label}
           </Link>
         ))}
+        {isAdmin && (
+          <Link
+            href="/usuarios"
+            className={cn(
+              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+              pathname.startsWith("/usuarios")
+                ? "bg-primary text-primary-foreground"
+                : "text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+            )}
+          >
+            <Users className="h-4 w-4" />
+            Utilizadores
+          </Link>
+        )}
       </nav>
       <div className="p-3">
         <Button
