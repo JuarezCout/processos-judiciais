@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -55,9 +55,7 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
     responsavel: initialData?.responsavel ?? "",
     statusDescricao: initialData?.statusDescricao ?? "",
     situacao: initialData?.situacao ?? "em_andamento",
-    atualizacao: initialData?.atualizacao
-      ? initialData.atualizacao.slice(0, 10)
-      : "",
+    atualizacao: initialData?.atualizacao ? initialData.atualizacao.slice(0, 10) : "",
     observacoes: initialData?.observacoes ?? "",
   });
 
@@ -80,9 +78,7 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
 
     startTransition(async () => {
       try {
-        const url = isEditing
-          ? `/api/processos/${initialData!.id}`
-          : "/api/processos";
+        const url = isEditing ? `/api/processos/${initialData!.id}` : "/api/processos";
         const method = isEditing ? "PUT" : "POST";
 
         const res = await fetch(url, {
@@ -98,9 +94,7 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         }
 
         const saved = await res.json();
-        toast.success(
-          isEditing ? "Processo atualizado!" : "Processo cadastrado!",
-        );
+        toast.success(isEditing ? "Processo atualizado!" : "Processo cadastrado!");
         router.push(`/processos/${saved.id}`);
         router.refresh();
       } catch {
@@ -118,18 +112,13 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="assunto">Assunto *</Label>
-            <Select
-              value={form.assunto}
-              onValueChange={(v) => setField("assunto", v ?? "")}
-            >
+            <Select value={form.assunto} onValueChange={(v) => setField("assunto", v ?? "")}>
               <SelectTrigger id="assunto">
                 <SelectValue placeholder="Selecione o assunto" />
               </SelectTrigger>
               <SelectContent>
                 {ASSUNTOS.map((a) => (
-                  <SelectItem key={a} value={a}>
-                    {a}
-                  </SelectItem>
+                  <SelectItem key={a} value={a}>{a}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -208,18 +197,13 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="situacao">Situação *</Label>
-            <Select
-              value={form.situacao}
-              onValueChange={(v) => setField("situacao", v ?? "")}
-            >
+            <Select value={form.situacao} onValueChange={(v) => setField("situacao", v ?? "")}>
               <SelectTrigger id="situacao">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {SITUACOES.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
+                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -252,306 +236,7 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
           Cancelar
         </Button>
         <Button type="submit" disabled={isPending}>
-          {isPending
-            ? "Salvando..."
-            : isEditing
-              ? "Salvar Alterações"
-              : "Cadastrar Processo"}
-        </Button>
-      </div>
-    </form>
-  );
-}
-
-const SITUACOES = [
-  "Em andamento",
-  "Suspenso",
-  "Arquivado",
-  "Encerrado",
-  "Aguardando julgamento",
-  "Recurso pendente",
-];
-
-const CLASSES = [
-  "Ação Civil Ordinária",
-  "Ação de Execução",
-  "Ação Trabalhista",
-  "Habeas Corpus",
-  "Mandado de Segurança",
-  "Recurso de Apelação",
-  "Agravo de Instrumento",
-  "Ação Penal",
-  "Ação de Divórcio",
-  "Inventário",
-  "Outra",
-];
-
-interface ProcessoFormProps {
-  initialData?: {
-    id: string;
-    numero: string;
-    classe: string;
-    assunto: string;
-    tribunal: string;
-    vara: string;
-    comarca: string;
-    dataDistribuicao: string;
-    autor: string;
-    reu: string;
-    advogado: string;
-    valorCausa: number | null;
-    situacao: string;
-    observacoes: string | null;
-  };
-}
-
-export function ProcessoForm({ initialData }: ProcessoFormProps) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const isEditing = !!initialData;
-
-  const [form, setForm] = useState({
-    numero: initialData?.numero ?? "",
-    classe: initialData?.classe ?? "",
-    assunto: initialData?.assunto ?? "",
-    tribunal: initialData?.tribunal ?? "",
-    vara: initialData?.vara ?? "",
-    comarca: initialData?.comarca ?? "",
-    dataDistribuicao: initialData?.dataDistribuicao
-      ? initialData.dataDistribuicao.slice(0, 10)
-      : "",
-    autor: initialData?.autor ?? "",
-    reu: initialData?.reu ?? "",
-    advogado: initialData?.advogado ?? "",
-    valorCausa: initialData?.valorCausa?.toString() ?? "",
-    situacao: initialData?.situacao ?? "Em andamento",
-    observacoes: initialData?.observacoes ?? "",
-  });
-
-  function setField(field: string, value: string) {
-    setForm((f) => ({ ...f, [field]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const body = {
-      ...form,
-      valorCausa: form.valorCausa ? parseFloat(form.valorCausa) : null,
-    };
-
-    startTransition(async () => {
-      try {
-        const url = isEditing
-          ? `/api/processos/${initialData!.id}`
-          : "/api/processos";
-        const method = isEditing ? "PUT" : "POST";
-
-        const res = await fetch(url, {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        if (!res.ok) {
-          const err = await res.json();
-          toast.error(err.error?.message ?? "Erro ao salvar processo");
-          return;
-        }
-
-        const saved = await res.json();
-        toast.success(
-          isEditing ? "Processo atualizado!" : "Processo cadastrado!",
-        );
-        router.push(`/processos/${saved.id}`);
-        router.refresh();
-      } catch {
-        toast.error("Erro de comunicação com o servidor");
-      }
-    });
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Dados do Processo</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="numero">Número do Processo *</Label>
-            <Input
-              id="numero"
-              value={form.numero}
-              onChange={(e) => setField("numero", e.target.value)}
-              placeholder="0000000-00.0000.0.00.0000"
-              required
-              disabled={isEditing}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="classe">Classe Processual *</Label>
-            <Select
-              value={form.classe}
-              onValueChange={(v) => setField("classe", v ?? "")}
-            >
-              <SelectTrigger id="classe">
-                <SelectValue placeholder="Selecione a classe" />
-              </SelectTrigger>
-              <SelectContent>
-                {CLASSES.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="assunto">Assunto *</Label>
-            <Input
-              id="assunto"
-              value={form.assunto}
-              onChange={(e) => setField("assunto", e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="tribunal">Tribunal *</Label>
-            <Input
-              id="tribunal"
-              value={form.tribunal}
-              onChange={(e) => setField("tribunal", e.target.value)}
-              placeholder="Ex.: TJSP, TRF3, TST"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="vara">Vara *</Label>
-            <Input
-              id="vara"
-              value={form.vara}
-              onChange={(e) => setField("vara", e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="comarca">Comarca *</Label>
-            <Input
-              id="comarca"
-              value={form.comarca}
-              onChange={(e) => setField("comarca", e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="dataDistribuicao">Data de Distribuição *</Label>
-            <Input
-              id="dataDistribuicao"
-              type="date"
-              value={form.dataDistribuicao}
-              onChange={(e) => setField("dataDistribuicao", e.target.value)}
-              required
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Partes</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="autor">Autor(es) *</Label>
-            <Input
-              id="autor"
-              value={form.autor}
-              onChange={(e) => setField("autor", e.target.value)}
-              placeholder="Nomes separados por vírgula"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="reu">Réu(s) *</Label>
-            <Input
-              id="reu"
-              value={form.reu}
-              onChange={(e) => setField("reu", e.target.value)}
-              placeholder="Nomes separados por vírgula"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="advogado">Advogado(s) *</Label>
-            <Input
-              id="advogado"
-              value={form.advogado}
-              onChange={(e) => setField("advogado", e.target.value)}
-              placeholder="Nomes separados por vírgula"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="valorCausa">Valor da Causa (R$)</Label>
-            <Input
-              id="valorCausa"
-              type="number"
-              step="0.01"
-              min="0"
-              value={form.valorCausa}
-              onChange={(e) => setField("valorCausa", e.target.value)}
-              placeholder="0,00"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Status e Observações</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="situacao">Situação *</Label>
-            <Select
-              value={form.situacao}
-              onValueChange={(v) => setField("situacao", v ?? "")}
-            >
-              <SelectTrigger id="situacao">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SITUACOES.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="observacoes">Observações</Label>
-            <Textarea
-              id="observacoes"
-              value={form.observacoes}
-              onChange={(e) => setField("observacoes", e.target.value)}
-              rows={4}
-              placeholder="Informações adicionais sobre o processo..."
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex gap-3 justify-end">
-        <Button type="button" variant="outline" onClick={() => router.back()}>
-          Cancelar
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending
-            ? "Salvando..."
-            : isEditing
-              ? "Salvar Alterações"
-              : "Cadastrar Processo"}
+          {isPending ? "Salvando..." : isEditing ? "Salvar Alterações" : "Cadastrar Processo"}
         </Button>
       </div>
     </form>
