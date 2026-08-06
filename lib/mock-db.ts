@@ -311,7 +311,6 @@ export const mockDb = {
     },
 
     async create({ data }: { data: Record<string, unknown> }) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { historico: histNested, ...fields } = data;
       const p: Processo = {
         ...(fields as Omit<Processo, "id" | "dataCadastro" | "updatedAt">),
@@ -349,7 +348,6 @@ export const mockDb = {
     }) {
       const idx = processos.findIndex((p) => p.id === where.id);
       if (idx === -1) return null;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { historico: histNested, ...fields } = data;
       processos[idx] = {
         ...processos[idx],
@@ -443,7 +441,8 @@ export const mockDb = {
 
   user: {
     // no DB users in mock mode; admin login is handled by the bypass in auth.ts
-    async findUnique(_args: unknown) {
+    // no-op: mock mode has no real users
+    async findUnique() {
       return null;
     },
   },

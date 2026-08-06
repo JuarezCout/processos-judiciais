@@ -19,5 +19,4 @@ const realPrisma = isMock ? null : (globalForPrisma.prisma ?? createPrisma());
 if (realPrisma && process.env.NODE_ENV !== "production")
   globalForPrisma.prisma = realPrisma;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const prisma = (isMock ? mockDb : realPrisma) as unknown as PrismaClient;
