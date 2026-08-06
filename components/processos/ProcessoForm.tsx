@@ -55,7 +55,9 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
     responsavel: initialData?.responsavel ?? "",
     statusDescricao: initialData?.statusDescricao ?? "",
     situacao: initialData?.situacao ?? "em_andamento",
-    atualizacao: initialData?.atualizacao ? initialData.atualizacao.slice(0, 10) : "",
+    atualizacao: initialData?.atualizacao
+      ? initialData.atualizacao.slice(0, 10)
+      : "",
     observacoes: initialData?.observacoes ?? "",
   });
 
@@ -78,7 +80,9 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
 
     startTransition(async () => {
       try {
-        const url = isEditing ? `/api/processos/${initialData!.id}` : "/api/processos";
+        const url = isEditing
+          ? `/api/processos/${initialData!.id}`
+          : "/api/processos";
         const method = isEditing ? "PUT" : "POST";
 
         const res = await fetch(url, {
@@ -94,7 +98,9 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         }
 
         const saved = await res.json();
-        toast.success(isEditing ? "Processo atualizado!" : "Processo cadastrado!");
+        toast.success(
+          isEditing ? "Processo atualizado!" : "Processo cadastrado!",
+        );
         router.push(`/processos/${saved.id}`);
         router.refresh();
       } catch {
@@ -112,13 +118,18 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="assunto">Assunto *</Label>
-            <Select value={form.assunto} onValueChange={(v) => setField("assunto", v ?? "")}>
+            <Select
+              value={form.assunto}
+              onValueChange={(v) => setField("assunto", v ?? "")}
+            >
               <SelectTrigger id="assunto">
                 <SelectValue placeholder="Selecione o assunto" />
               </SelectTrigger>
               <SelectContent>
                 {ASSUNTOS.map((a) => (
-                  <SelectItem key={a} value={a}>{a}</SelectItem>
+                  <SelectItem key={a} value={a}>
+                    {a}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -197,13 +208,18 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="situacao">Situação *</Label>
-            <Select value={form.situacao} onValueChange={(v) => setField("situacao", v ?? "")}>
+            <Select
+              value={form.situacao}
+              onValueChange={(v) => setField("situacao", v ?? "")}
+            >
               <SelectTrigger id="situacao">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {SITUACOES.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -236,7 +252,11 @@ export function ProcessoForm({ initialData }: ProcessoFormProps) {
           Cancelar
         </Button>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Salvando..." : isEditing ? "Salvar Alterações" : "Cadastrar Processo"}
+          {isPending
+            ? "Salvando..."
+            : isEditing
+              ? "Salvar Alterações"
+              : "Cadastrar Processo"}
         </Button>
       </div>
     </form>
