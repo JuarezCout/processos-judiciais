@@ -25,7 +25,7 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
   return (
     <aside className="w-64 bg-slate-900 text-slate-100 flex flex-col min-h-screen">
       <div className="flex items-center gap-3 px-6 py-5">
-        <Scale className="h-7 w-7 text-primary" />
+        <Scale className="h-7 w-7 text-slate-100" />
         <span className="font-semibold text-sm leading-tight">
           Sistema de
           <br />
