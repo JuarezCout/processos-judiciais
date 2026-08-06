@@ -21,7 +21,8 @@ export const dynamic = "force-dynamic";
 export default async function UsuariosPage() {
   const session = await auth();
   if (!session) redirect("/login");
-  if ((session.user as { role?: string }).role !== "admin") redirect("/dashboard");
+  if ((session.user as { role?: string }).role !== "admin")
+    redirect("/dashboard");
 
   const usuarios = await prisma.user.findMany({
     select: { id: true, name: true, email: true, role: true, createdAt: true },
@@ -34,7 +35,8 @@ export default async function UsuariosPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Utilizadores</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {usuarios.length} utilizador{usuarios.length !== 1 ? "es" : ""} registado{usuarios.length !== 1 ? "s" : ""}
+            {usuarios.length} utilizador{usuarios.length !== 1 ? "es" : ""}{" "}
+            registado{usuarios.length !== 1 ? "s" : ""}
           </p>
         </div>
         <Link href="/usuarios/novo">
@@ -58,7 +60,10 @@ export default async function UsuariosPage() {
           <TableBody>
             {usuarios.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                <TableCell
+                  colSpan={4}
+                  className="text-center text-muted-foreground py-8"
+                >
                   Nenhum utilizador encontrado.
                 </TableCell>
               </TableRow>
@@ -68,13 +73,17 @@ export default async function UsuariosPage() {
                   <TableCell className="font-medium">{u.name ?? "—"}</TableCell>
                   <TableCell>{u.email}</TableCell>
                   <TableCell>
-                    <Badge variant={u.role === "admin" ? "default" : "secondary"}>
+                    <Badge
+                      variant={u.role === "admin" ? "default" : "secondary"}
+                    >
                       {u.role === "admin" ? "Admin" : "Utilizador"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">
                     {u.createdAt
-                      ? format(new Date(u.createdAt), "dd/MM/yyyy", { locale: ptBR })
+                      ? format(new Date(u.createdAt), "dd/MM/yyyy", {
+                          locale: ptBR,
+                        })
                       : "—"}
                   </TableCell>
                 </TableRow>

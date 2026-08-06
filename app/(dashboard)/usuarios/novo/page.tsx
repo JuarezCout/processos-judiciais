@@ -104,7 +104,10 @@ export default function NovoUsuarioPage() {
 
             <div className="space-y-2">
               <Label htmlFor="role">Perfil</Label>
-              <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v ?? "user" })}>
+              <Select
+                value={form.role}
+                onValueChange={(v) => setForm({ ...form, role: v ?? "user" })}
+              >
                 <SelectTrigger id="role">
                   <SelectValue />
                 </SelectTrigger>

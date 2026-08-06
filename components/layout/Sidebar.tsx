@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Scale, FolderOpen, LayoutDashboard, LogOut, Users } from "lucide-react";
+import {
+  Scale,
+  FolderOpen,
+  LayoutDashboard,
+  LogOut,
+  Users,
+} from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,7 +27,9 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
       <div className="flex items-center gap-3 px-6 py-5">
         <Scale className="h-7 w-7 text-primary" />
         <span className="font-semibold text-sm leading-tight">
-          Sistema de<br />Processos Judiciais
+          Sistema de
+          <br />
+          Processos Judiciais
         </span>
       </div>
       <Separator className="bg-slate-700" />
@@ -34,7 +42,7 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
               pathname.startsWith(href)
                 ? "bg-primary text-primary-foreground"
-                : "text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+                : "text-slate-300 hover:bg-slate-800 hover:text-slate-100",
             )}
           >
             <Icon className="h-4 w-4" />
@@ -48,7 +56,7 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
               pathname.startsWith("/usuarios")
                 ? "bg-primary text-primary-foreground"
-                : "text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+                : "text-slate-300 hover:bg-slate-800 hover:text-slate-100",
             )}
           >
             <Users className="h-4 w-4" />

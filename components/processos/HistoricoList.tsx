@@ -17,15 +17,15 @@ interface HistoricoListProps {
 
 const TIPO_COLORS: Record<string, string> = {
   "Petição Inicial": "bg-blue-100 text-blue-800",
-  "Sentença": "bg-green-100 text-green-800",
-  "Despacho": "bg-purple-100 text-purple-800",
+  Sentença: "bg-green-100 text-green-800",
+  Despacho: "bg-purple-100 text-purple-800",
   "Decisão Interlocutória": "bg-indigo-100 text-indigo-800",
-  "Recurso": "bg-orange-100 text-orange-800",
-  "Acórdão": "bg-teal-100 text-teal-800",
+  Recurso: "bg-orange-100 text-orange-800",
+  Acórdão: "bg-teal-100 text-teal-800",
   "Acordo/Conciliação": "bg-emerald-100 text-emerald-800",
-  "Arquivamento": "bg-slate-100 text-slate-800",
-  "Cadastro": "bg-gray-100 text-gray-700",
-  "Atualização": "bg-yellow-100 text-yellow-800",
+  Arquivamento: "bg-slate-100 text-slate-800",
+  Cadastro: "bg-gray-100 text-gray-700",
+  Atualização: "bg-yellow-100 text-yellow-800",
 };
 
 export function HistoricoList({ historico }: HistoricoListProps) {
@@ -48,18 +48,25 @@ export function HistoricoList({ historico }: HistoricoListProps) {
               <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
-                    TIPO_COLORS[item.tipoMovimentacao] ?? "bg-slate-100 text-slate-700"
+                    TIPO_COLORS[item.tipoMovimentacao] ??
+                    "bg-slate-100 text-slate-700"
                   }`}
                 >
                   {item.tipoMovimentacao}
                 </span>
                 <span className="text-xs text-slate-400">
-                  {format(new Date(item.dataMovimentacao), "dd/MM/yyyy 'às' HH:mm", {
-                    locale: ptBR,
-                  })}
+                  {format(
+                    new Date(item.dataMovimentacao),
+                    "dd/MM/yyyy 'às' HH:mm",
+                    {
+                      locale: ptBR,
+                    },
+                  )}
                 </span>
               </div>
-              <p className="text-sm text-slate-700 whitespace-pre-line">{item.descricao}</p>
+              <p className="text-sm text-slate-700 whitespace-pre-line">
+                {item.descricao}
+              </p>
               <div className="flex flex-wrap items-center gap-4 pt-1">
                 {item.usuario && (
                   <span className="flex items-center gap-1 text-xs text-slate-400">
