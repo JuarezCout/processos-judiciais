@@ -4,17 +4,24 @@ import { prisma } from "@/lib/db";
 
 export async function GET() {
   const session = await auth();
-  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  if (!session)
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
   const [
     totalProcessos,
     processosPorSituacao,
     processosPorTribunal,
     ultimosAndamentos,
-  ] = await Promise.all([ // processosPorTribunal reused as processosPorAssunto below
+  ] = await Promise.all([
+    // processosPorTribunal reused as processosPorAssunto below
     prisma.processo.count(),
     prisma.processo.groupBy({ by: ["situacao"], _count: true }),
-    prisma.processo.groupBy({ by: ["assunto"], _count: true, orderBy: { _count: { assunto: "desc" } }, take: 5 }),
+    prisma.processo.groupBy({
+      by: ["assunto"],
+      _count: true,
+      orderBy: { _count: { assunto: "desc" } },
+      take: 5,
+    }),
     prisma.historicoProcessual.findMany({
       take: 10,
       orderBy: { dataMovimentacao: "desc" },

@@ -32,7 +32,9 @@ export default async function AndamentoPage({
           <ArrowLeft className="h-3.5 w-3.5" />
           Voltar ao processo
         </Link>
-        <h1 className="text-2xl font-bold text-slate-800">Registrar Andamento</h1>
+        <h1 className="text-2xl font-bold text-slate-800">
+          Registrar Andamento
+        </h1>
         <p className="text-slate-500 font-mono text-sm">
           {processo.numero ?? "ADM"} — {processo.tipoProcedimento}
         </p>
